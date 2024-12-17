@@ -56,6 +56,9 @@ type artifactPrepareVersionCommonPipelineEnvironment struct {
 		headCommitID  string
 		commitMessage string
 	}
+	container struct {
+		labels map[string]interface{}
+	}
 }
 
 func (p *artifactPrepareVersionCommonPipelineEnvironment) persist(path, resourceName string) {
@@ -72,6 +75,7 @@ func (p *artifactPrepareVersionCommonPipelineEnvironment) persist(path, resource
 		{category: "git", name: "commitId", value: p.git.commitID},
 		{category: "git", name: "headCommitId", value: p.git.headCommitID},
 		{category: "git", name: "commitMessage", value: p.git.commitMessage},
+		{category: "container", name: "labels", value: p.container.labels},
 	}
 
 	errCount := 0
@@ -136,7 +140,7 @@ Another typical use-case is development of a library with regular releases where
 
 The version is then either manually set by the team in the course of the development process or automatically pushed to master after a successful release.
 
-Unlike for the _Continuous Deloyment_ pattern described above, in this case there is no dedicated tagging required for the build process since the version is already available in the repository.
+Unlike for the _Continuous Deployment_ pattern described above, in this case there is no dedicated tagging required for the build process since the version is already available in the repository.
 
 Configuration of this pattern is done via ` + "`" + `versioningType: library` + "`" + `.
 
@@ -582,6 +586,7 @@ func artifactPrepareVersionMetadata() config.StepData {
 							{"name": "git/commitId"},
 							{"name": "git/headCommitId"},
 							{"name": "git/commitMessage"},
+							{"name": "container/labels", "type": "map[string]interface{}"},
 						},
 					},
 				},
