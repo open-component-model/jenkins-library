@@ -8,6 +8,7 @@ import (
 	"io"
 	"maps"
 	"math"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -25,7 +26,7 @@ import (
 	"github.com/SAP/jenkins-library/pkg/telemetry"
 	"github.com/SAP/jenkins-library/pkg/toolrecord"
 	"github.com/bmatcuk/doublestar"
-	"github.com/google/go-github/v45/github"
+	"github.com/google/go-github/v68/github"
 	"github.com/pkg/errors"
 )
 
@@ -803,7 +804,7 @@ func (c *checkmarxOneExecuteScanHelper) getDetailedResults(scan *checkmarxOne.Sc
 	}
 
 	resultMap["Preset"] = scanmeta.PresetName
-	resultMap["DeepLink"] = fmt.Sprintf("%v/projects/%v/overview?branch=%v", c.config.ServerURL, c.Project.ProjectID, scan.Branch)
+	resultMap["DeepLink"] = fmt.Sprintf("%v/projects/%v/overview?branch=%v", c.config.ServerURL, c.Project.ProjectID, url.QueryEscape(scan.Branch))
 	resultMap["ReportCreationTime"] = time.Now().String()
 	resultMap["High"] = map[string]int{}
 	resultMap["Medium"] = map[string]int{}

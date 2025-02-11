@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -28,7 +29,7 @@ import (
 	"github.com/SAP/jenkins-library/pkg/toolrecord"
 	"github.com/SAP/jenkins-library/pkg/versioning"
 
-	"github.com/google/go-github/v45/github"
+	"github.com/google/go-github/v68/github"
 	"github.com/pkg/errors"
 )
 
@@ -428,9 +429,11 @@ func getDetectScript(config detectExecuteScanOptions, utils detectUtils) error {
 
 	downloadScript := func() error {
 		if config.UseDetect8 {
-			return utils.DownloadFile("https://detect.synopsys.com/detect8.sh", "detect.sh", nil, nil)
+			return utils.DownloadFile("https://detect.blackduck.com/detect8.sh", "detect.sh", nil, nil)
+		} else if config.UseDetect9 {
+			return utils.DownloadFile("https://detect.blackduck.com/detect9.sh", "detect.sh", nil, nil)
 		}
-		return utils.DownloadFile("https://detect.synopsys.com/detect9.sh", "detect.sh", nil, nil)
+		return utils.DownloadFile("https://detect.blackduck.com/detect10.sh", "detect.sh", nil, nil)
 
 	}
 
@@ -467,7 +470,7 @@ func addDetectArgs(args []string, config detectExecuteScanOptions, utils detectU
 	handleExcludedDirectories(&args, &config)
 
 	if config.Unmap {
-		if !piperutils.ContainsString(config.ScanProperties, "--detect.project.codelocation.unmap=true") {
+		if !slices.Contains(config.ScanProperties, "--detect.project.codelocation.unmap=true") {
 			args = append(args, "--detect.project.codelocation.unmap=true")
 		}
 		config.ScanProperties, _ = piperutils.RemoveAll(config.ScanProperties, "--detect.project.codelocation.unmap=false")
