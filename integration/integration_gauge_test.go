@@ -56,7 +56,7 @@ cd /test
 	}
 
 	if languageRunner == "js" {
-		reqNode.Image = "node:lts-buster"
+		reqNode.Image = "node:lts-bookworm"
 	}
 
 	nodeContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
@@ -88,11 +88,11 @@ cd /test
 }
 
 func TestGaugeIntegrationJava(t *testing.T) {
-	t.Parallel()
+	// t.Parallel()
 	runTest(t, "java")
 }
 
 func TestGaugeIntegrationJS(t *testing.T) {
-	t.Parallel()
+	// t.Parallel()
 	runTest(t, "js")
 }
